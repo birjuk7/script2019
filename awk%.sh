@@ -1,0 +1,1 @@
+file="/tmp/2apr.txt"; tot=`cat $file | wc -l`;  cat $file |  awk -F' ' '{td=$22; gd=(int((td)/4)*4); print gd}' | sort -n | uniq -c | head -10 | awk -F' ' -v tot=$tot '{printf("%d %.2f\n", $2, ($1/tot)*100);}'

@@ -1,0 +1,94 @@
+awk commands
+
+cat fo_contract_stream_info.csv | awk -F',' '$2==n {print $2,$5}' | sort | uniq            ###### nth stream contents (replace n by 1 to 8)
+cat fo_contract_stream_info.csv | awk -F',' '$2==3 {print $2,$5}'| sort | uniq             #####print specific stream contents                       
+cat fo_contract_stream_info.csv | awk -F',' '{print $5}' | grep BANK | sort | uniq         #####print unique banks
+cat fo_contract_stream_info.csv | awk -F',' '$5== "IGL" {print $2,$5}' | uniq               ##### TO FIND SPECIFIC TXT
+
+cat trade.txt | awk -F',' '{print $23}' | sort | uniq | paste -s -d'|'
+
+cat log13052019.txt | grep 1000000003813671 | grep "sysOrderNumber"
+
+
+cat log13052019.txt | grep -E "1000000003813671|1000000003854034" | grep "sysOrderNumber"
+cat trade.txt | awk -F',' '{print $23}' | sort | uniq | wc -l
+
+select * from archivecontracttradelog where exchordernum=1000000003813671;
+
+
+
+find . -name '28Mar19*.lrz' | xargs du -sch
+
+
+cut
+
+
+head -5 cd_contract.txt | cut -d'|' -f1-3,28
+
+
+
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:"
+
+
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk -F ' ' '{print $4,$7,$19,$21}'
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk -F ' ' '{print substr($21,1,1)}' | grep 8 | wc -l
+
+
+
+
+
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $NF}'           #### showing only last field i.e user & pid
+
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $NF}' |rev |cut -c 6- | rev                 ### for getting users list 
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $NF}' |rev |cut -c -5 | rev            #### getting the pid
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c -5 | rev
+
+s=s+$i}; END{print s}
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk ' s=$21-2 {print $s}' |rev |cut -c -5 | rev
+
+
+
+
+for i in $1 do; foo=$(( foo+$(i) )) done| echo $foo
+
+
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'|rev |cut -c  6- | rev                             ### bk
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c 6- | rev                      ### users
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c -5 | rev                  ### pid
+
+
+echo "25 50"| awk '{print $2,"/",$1}' | bc
+
+
+https://bluescreenofjeff.com/2017-10-03-f-awk-yeah-advanced-sed-and-awk-usage-parsing-for-pentesters-3/                         #### program concepts
+
+While
+While loops will run until a specified condition is no longer true. The syntax for while loops is:
+-------------
+Do-While
+The do-while loop is very similar to a while loop, except that the condition is placed at the end of the syntax:
+--------------
+for (initialization; condition; increment)
+    {actions}
+
+
+user listing 
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c 6- |rev | awk -F' ' '{print $1-2}'                              ############# users list by rk
+cat log170519_1.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c 6- |rev | awk -F' ' '{print "user "$1-2}'                        ##### user listing
+or
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}' |rev |cut -c 6- |rev > /tmp/2                                         ##### by rk part1
+file_data=`cat /tmp/2`; for f in $file_data; do echo $f-2 | bc; done                                                                                   ##### by rk part2
+
+
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev                    ####### final 
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'|rev |cut -c  6- | rev
+
+echo '9191234567' | cut --characters 1-3,4- --output-delimiter ' '                     ####### to split a phone number or a numeric digit
+echo "9191234567" | sed 's/^\([0-9]\{3\}\)\([0-9]\{7\}\)$/\1 \2/'                      ####### to split a phone number or a numeric digit
+
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $21}'|rev |cut --characters 1-5,6- --output-delimiter ' '| rev                                                                                                                                              ### user and pid got separated by space
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev | awk -F' ' '{print "user"$5-2 ,   $6  }'                                                              ###   user11 00060
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev | awk -F' ' '{print "user"$5-2 ,   $6  }' | awk -F' ' '$2==00199{print $1, int($2)}' | wc -l                        ###  gives order only
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev | awk -F' ' '{print "user"$5-2 ,   $6  }' | awk -F' ' '$2==00199{print $1, int($2)}' | sort | uniq -c            ## #  94 user4 199
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev | awk -F' ' '{print "user"$5-2 ,   $6  }' | awk -F' ' '$2==00199{print $1, int($2)}'                                  ###   user4 199                                                
+
