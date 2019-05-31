@@ -1,0 +1,1 @@
+cat x.txt | grep "STRATEGY ORDER SENDING:" | awk '{print $4,$7,$19,$21,$21}'| rev |cut --characters 1-5,6- --output-delimiter ' '| rev | awk -F' ' '{print "user"$5-2 , int($6)}' | sort | uniq -c | sort -k1 -n -r | head -20                               ##### final 31may_required command for user == pid and ==order for the trade
