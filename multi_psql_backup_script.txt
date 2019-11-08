@@ -1,0 +1,56 @@
+gen_all_db_backup_script     08Nov19
+
+
+birju@cogmac:~$ v="hello"
+birju@cogmac:~$ 
+birju@cogmac:~$ echo "${v:0:1}"
+h
+birju@cogmac:~$ echo "${v:0:2}"
+he
+birju@cogmac:~$ 
+
+
+
+
+
+#!/bin/bash
+set -e
+
+dateStr=`date +'%d%b%y'`;
+mkdir -p /root/database/"$dateStr"
+export PGPASSWORD=postgres
+
+filedata=`cat /root/scripts_backup/scripts_backup_13july16/daily_report.conf`;
+for line in $filedata; do
+	if [ -z $line ] || [ ${line:0:1} == "#" ] || [ ${line:0:2} == "//" ]; then
+		continue;
+	fi;
+	dbserver=`echo $line |awk -F',' '{print $2}'`;
+	dbname=`echo $line |awk -F',' '{print $4}'`;
+	#echo $dbserver,$dbname;
+	echo pg_dump -h $dbserver -p 5432 -U postgres -F c -b -f /root/database/"$dateStr"/"$dbname.backup" $dbname
+	pg_dump -h $dbserver -p 5432 -U postgres -F c -b -f /root/database/"$dateStr"/"$dbname.backup" $dbname
+done;
+
+
+#---------------------------------------------- pg_dump backup command --------------------------------------------------------------------------
+#                                                       database_server                                           backup_name     db_name            
+#PGPASSWORD=postgres pg_dump -h 192.168.20.217 -p 5432 -U postgres -F c -b -f "57_$i.backup" -v bidd_57   #### backup command postgres
+#----------------------------------------------- pg_restore command below -------------------------------------------------------------------------
+#                                 database_server                       db_name       created_backup             
+#PGPASSWORD=postgres pg_restore -h 192.168.20.217 -p 5432 -U postgres -d test_db -v iocalr_62.backup         #### restore command posgres
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
